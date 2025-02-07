@@ -2,6 +2,8 @@
 
 import tkinter as tk
 from tkinter import ttk, messagebox
+from ui.inventory_gui import InventoryGUI
+from inventory.manager import TugboatInventory  # Ensure this import is correct
 
 class MainMenuGUI:
     def __init__(self, root, current_user):
@@ -33,7 +35,7 @@ class MainMenuGUI:
             ("Advanced Reporting", self.open_advanced_reporting),
             ("Process Notifications", self.open_process_notifications),
             ("View Audit Logs", self.open_audit_logs),
-            ("Exit", self.exit_application)
+            ("Log Out", self.logout_application)
         ]
 
         # Create a grid: 2 columns x 4 rows
@@ -50,9 +52,12 @@ class MainMenuGUI:
         for row in range(4):
             buttons_frame.rowconfigure(row, weight=1)
 
-    # Callback functions (for now, display simple messages)
+    # Callback functions
     def open_inventory_management(self):
-        messagebox.showinfo("Inventory Management", "Open Inventory Management GUI...")
+        # Open a new window for the Inventory Management GUI
+        inv_root = tk.Toplevel(self.root)
+        inventory_manager = TugboatInventory()  # You might want to pass the existing inventory manager
+        InventoryGUI(inv_root, inventory_manager)
 
     def open_maintenance_ticketing(self):
         messagebox.showinfo("Maintenance Ticketing", "Open Maintenance Ticketing GUI...")
@@ -72,8 +77,9 @@ class MainMenuGUI:
     def open_audit_logs(self):
         messagebox.showinfo("View Audit Logs", "Open Audit Logs GUI...")
 
-    def exit_application(self):
-        self.root.quit()
+    def logout_application(self):
+        self.root.destroy()
+        run_login()
 
 def run_main_menu(current_user):
     root = tk.Tk()
