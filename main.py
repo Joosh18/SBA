@@ -75,6 +75,54 @@ def login_via_gui():
         print("Login failed. Exiting.")
         sys.exit(1)
     else:
+        log_event(current_user.username, "Login", f"User {current_user.username} logged in.")
+        print(f"Welcome, {current_user.username}! Your role is: {current_user.role}")
+
+# -------------------- Main Program --------------------
+
+def main():
+    # Launch the GUI login window and authenticate the user.
+    login_via_gui()
+    # After successful login, call the GUI main menu.
+    run_main_menu(current_user)
+    # Close the database connection when done.
+    db_storage.close()
+
+if __name__ == '__main__':
+    main()
+
+# -------------------- Global Setup --------------------
+
+# Instantiate the inventory manager and database storage
+inventory_manager = TugboatInventory()
+db_storage = DatabaseStorage()
+
+# For demonstration, add some tugboats (in a real system these might be loaded from the database)
+tugboats = [
+    "Anne Jarrett", "Beaufort", "Belle", "Captain D", "George Holland",
+    "Jack Holland", "James William", "Lorette", "Pamlico", "Pathfinder",
+    "Paula Atwell", "Robert Burton", "Stephen J. Leaman",
+    "W. Lloyd Taliaferro", "Ware House"
+]
+for tugboat in tugboats:
+    inventory_manager.add_tugboat(tugboat)
+
+# Sample list for recurring tickets (if using recurring tickets)
+recurring_tickets = []
+
+# We will use the GUI login instead of a CLI demo user dictionary.
+current_user = None
+
+# -------------------- Login Function (GUI) --------------------
+
+def login_via_gui():
+    global current_user
+    print("Launching GUI login window...")
+    current_user = run_login()  # run_login() will display the login window and return the authenticated user.
+    if current_user is None:
+        print("Login failed. Exiting.")
+        sys.exit(1)
+    else:
         log_event(current_user, "Login", f"User {current_user.username} logged in.")
         print(f"Welcome, {current_user.username}! Your role is: {current_user.role}")
 
