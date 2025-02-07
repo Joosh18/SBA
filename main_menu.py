@@ -1,10 +1,5 @@
 # ui/main_menu.py
 
-try:
-    from PIL import Image, ImageTk  # Pillow must be installed (pip install Pillow)
-except ImportError:
-    raise ImportError("Pillow is not installed. Please install it by running 'pip install Pillow' in your command line.")
-
 import tkinter as tk
 from tkinter import ttk, messagebox
 
@@ -29,32 +24,21 @@ class MainMenuGUI:
         buttons_frame = ttk.Frame(main_frame)
         buttons_frame.pack(expand=True, fill="both", pady=20)
 
-        # List of options: (label text, icon file path, callback function)
+        # List of options: (label text, callback function)
         options = [
-            ("Inventory Management", "icons/inventory.png", self.open_inventory_management),
-            ("Maintenance Ticketing", "icons/maintenance.png", self.open_maintenance_ticketing),
-            ("Safety Ticketing", "icons/safety.png", self.open_safety_ticketing),
-            ("Recurring Ticket Management", "icons/recurring.png", self.open_recurring_ticket_management),
-            ("Advanced Reporting", "icons/reporting.png", self.open_advanced_reporting),
-            ("Process Notifications", "icons/notifications.png", self.open_process_notifications),
-            ("View Audit Logs", "icons/audit.png", self.open_audit_logs),
-            ("Exit", "icons/exit.png", self.exit_application)
+            ("Inventory Management", self.open_inventory_management),
+            ("Maintenance Ticketing", self.open_maintenance_ticketing),
+            ("Safety Ticketing", self.open_safety_ticketing),
+            ("Recurring Ticket Management", self.open_recurring_ticket_management),
+            ("Advanced Reporting", self.open_advanced_reporting),
+            ("Process Notifications", self.open_process_notifications),
+            ("View Audit Logs", self.open_audit_logs),
+            ("Exit", self.exit_application)
         ]
 
         # Create a grid: 2 columns x 4 rows
-        for idx, (text, icon_path, callback) in enumerate(options):
-            # Attempt to load the icon image
-            try:
-                image = Image.open(icon_path)
-                image = image.resize((64, 64), Image.ANTIALIAS)
-                photo = ImageTk.PhotoImage(image)
-            except Exception as e:
-                photo = None
-
+        for idx, (text, callback) in enumerate(options):
             btn = ttk.Button(buttons_frame, text=text, command=callback, compound="top")
-            if photo:
-                btn.config(image=photo)
-                btn.image = photo  # keep a reference so it doesn't get garbage collected
 
             row = idx // 2
             col = idx % 2
